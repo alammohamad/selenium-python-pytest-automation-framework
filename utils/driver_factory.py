@@ -2,14 +2,21 @@ import os
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.firefox.service import Service as FirefoxService
 
 
 # ChromeDriver available on this Windows machine
 CHROMEDRIVER_PATH = (
     r"C:\Users\moham\.cache\selenium\chromedriver\win64"
     r"\152.0.7977.82\chromedriver.exe"
+)
+
+# GeckoDriver available on this Windows machine
+GECKODRIVER_PATH = (
+    r"C:\Users\moham\.cache\selenium\geckodriver\win64"
+    r"\0.37.1\geckodriver.exe"
 )
 
 
@@ -35,7 +42,7 @@ def create_driver(browser: str):
 
         print(f"ChromeDriver: {CHROMEDRIVER_PATH}")
 
-        service = Service(CHROMEDRIVER_PATH)
+        service = ChromeService(CHROMEDRIVER_PATH)
 
         return webdriver.Chrome(
             service=service,
@@ -52,7 +59,14 @@ def create_driver(browser: str):
         if os.getenv("CI") or os.getenv("JENKINS_HOME"):
             options.add_argument("-headless")
 
-        return webdriver.Firefox(options=options)
+        print(f"GeckoDriver: {GECKODRIVER_PATH}")
+
+        service = FirefoxService(GECKODRIVER_PATH)
+
+        return webdriver.Firefox(
+            service=service,
+            options=options,
+        )
 
     # =========================
     # UNSUPPORTED BROWSER
