@@ -1,0 +1,55 @@
+name: Pytest Selenium QA Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      env:
+        description: Environment
+        required: true
+        default: qa
+        type: choice
+        options: [qa, prod]
+      browser:
+        description: Browser
+        required: true
+        default: chrome
+        type: choice
+        options: [chrome, firefox]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      TEST_ENV: ${{ github.event.inputs.env || 'qa' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run QA regression / PROD smoke
+        env:
+          BROWSER: ${{ github.event.inputs.browser || 'chrome' }}
+        run: |
+          if [ "$TEST_ENV" = "prod" ]; then
+            pytest -m smoke --browser "$BROWSER" --env prod --html=reports/pytest-report.html --self-contained-html
+          else
+            pytest -m regression --browser "$BROWSER" --env qa --html=reports/pytest-report.html --self-contained-html
+          fi
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: reports/

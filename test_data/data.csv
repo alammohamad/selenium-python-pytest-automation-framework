@@ -1,0 +1,3 @@
+username,password,expected
+Admin,admin123,success
+Invaliduserid,WrongPass123,failure
