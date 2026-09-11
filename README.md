@@ -99,3 +99,4 @@ The source Java project currently uses the same OrangeHRM URL for QA and PROD. T
 | `CSVUtils` | `utils/csv_utils.py` |
 | TestNG listener | Pytest hooks/fixtures |
 | Surefire HTML reports | `pytest-html` |
+| GitHub Slack notification test |
