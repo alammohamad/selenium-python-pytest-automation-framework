@@ -40,12 +40,22 @@ def create_driver(browser: str):
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
 
-        print(f"ChromeDriver: {CHROMEDRIVER_PATH}")
+        # Use the Windows driver only when running on Windows.
+        # GitHub Actions runs on Linux, so Selenium Manager handles
+        # the driver there.
+        if os.name == "nt":
+            print(f"ChromeDriver: {CHROMEDRIVER_PATH}")
+            service = ChromeService(CHROMEDRIVER_PATH)
 
-        service = ChromeService(CHROMEDRIVER_PATH)
+            return webdriver.Chrome(
+                service=service,
+                options=options,
+            )
+
+        # Linux / GitHub Actions
+        print("ChromeDriver: Selenium Manager")
 
         return webdriver.Chrome(
-            service=service,
             options=options,
         )
 
@@ -59,12 +69,20 @@ def create_driver(browser: str):
         if os.getenv("CI") or os.getenv("JENKINS_HOME"):
             options.add_argument("-headless")
 
-        print(f"GeckoDriver: {GECKODRIVER_PATH}")
+        # Use the Windows driver only when running on Windows.
+        if os.name == "nt":
+            print(f"GeckoDriver: {GECKODRIVER_PATH}")
+            service = FirefoxService(GECKODRIVER_PATH)
 
-        service = FirefoxService(GECKODRIVER_PATH)
+            return webdriver.Firefox(
+                service=service,
+                options=options,
+            )
+
+        # Linux / GitHub Actions
+        print("GeckoDriver: Selenium Manager")
 
         return webdriver.Firefox(
-            service=service,
             options=options,
         )
 
