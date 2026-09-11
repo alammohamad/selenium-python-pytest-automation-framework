@@ -87,16 +87,16 @@ The source Java project currently uses the same OrangeHRM URL for QA and PROD. T
 
 ## Java → Pytest mapping
 
-| Java/TestNG | Python/Pytest |
-|---|---|
-| `@BeforeMethod` | `@pytest.fixture` |
-| `@AfterMethod` | fixture teardown after `yield` |
-| `@DataProvider` | `@pytest.mark.parametrize` |
-| TestNG groups | `@pytest.mark.smoke` / `@pytest.mark.regression` |
-| `Assert.assertTrue` | Python `assert` |
-| `WebDriverFactory` | `utils/driver_factory.py` |
-| `LoginPage` | `pages/login_page.py` |
-| `CSVUtils` | `utils/csv_utils.py` |
-| TestNG listener | Pytest hooks/fixtures |
-| Surefire HTML reports | `pytest-html` |
-| GitHub Slack notification test |
+| Java/TestNG                          | Python/Pytest |
+|--------------------------------------|---|
+| `@BeforeMethod`                      | `@pytest.fixture` |
+| `@AfterMethod`                       | fixture teardown after `yield` |
+| `@DataProvider`                      | `@pytest.mark.parametrize` |
+| TestNG groups                        | `@pytest.mark.smoke` / `@pytest.mark.regression` |
+| `Assert.assertTrue`                  | Python `assert` |
+| `WebDriverFactory`                   | `utils/driver_factory.py` |
+| `LoginPage`                          | `pages/login_page.py` |
+| `CSVUtils`                           | `utils/csv_utils.py` |
+| TestNG listener                      | Pytest hooks/fixtures |
+| Surefire HTML reports                | `pytest-html` |
+| GitHub Slack notification test again |
