@@ -161,6 +161,12 @@ def pytest_sessionfinish(session, exitstatus):
 
     environment = session.config.getoption("--env") or "qa"
     browser = session.config.getoption("--browser") or "chrome"
+    if os.getenv("JENKINS_HOME"):
+        execution_type = "Jenkins"
+    elif os.getenv("GITHUB_ACTIONS", "").lower() == "true":
+        execution_type = "GitHub Actions"
+    else:
+        execution_type = "Local"
 
     if exitstatus == 0:
         overall = "PASSED"
@@ -168,10 +174,10 @@ def pytest_sessionfinish(session, exitstatus):
         overall = "FAILED"
 
     message = (
-        "Selenium Python Pytest — Local Test Summary\n\n"
+        f"Selenium Python Pytest — {execution_type} Test Summary\n\n"
         f"Environment: {environment.upper()}\n"
         f"Browser: {browser.capitalize()}\n"
-        "Execution: Local\n\n"
+        f"Execution: {execution_type}\n\n"
         f"Total: {total}\n"
         f"Passed: {passed}\n"
         f"Failed: {failed}\n"
