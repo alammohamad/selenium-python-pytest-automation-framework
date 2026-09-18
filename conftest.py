@@ -6,7 +6,7 @@ import pytest
 from pytest_metadata.plugin import metadata_key
 
 from utils.driver_factory import create_driver
-
+from utils.slack_reporter import send_slack_message
 REPORT_DIR = Path("reports")
 SCREENSHOT_DIR = REPORT_DIR / "screenshots"
 
@@ -107,4 +107,77 @@ def pytest_runtest_makereport(item, call):
 
 def pytest_html_report_title(report):
     report.title = "Selenium Python Pytest Automation Framework"
+
+    # def pytest_terminal_summary(terminalreporter, exitstatus, config):
+    #     print("SLACK SUMMARY HOOK STARTED")
+    #     passed = len(terminalreporter.stats.get("passed", []))
+    #     failed = len(terminalreporter.stats.get("failed", []))
+    #     skipped = len(terminalreporter.stats.get("skipped", []))
+    #
+    #     total = passed + failed + skipped
+    #
+    #     environment = config.getoption("--env") or "qa"
+    #     browser = config.getoption("--browser") or "chrome"
+    #
+    #     if exitstatus == 0:
+    #         overall = "PASSED"
+    #     else:
+    #         overall = "FAILED"
+    #
+    #     message = (
+    #         "Selenium Python Pytest — Local Test Summary\n\n"
+    #         f"Environment: {environment.upper()}\n"
+    #         f"Browser: {browser.capitalize()}\n"
+    #         "Execution: Local\n\n"
+    #         f"Total: {total}\n"
+    #         f"Passed: {passed}\n"
+    #         f"Failed: {failed}\n"
+    #         f"Skipped: {skipped}\n\n"
+    #         f"Overall: {overall}"
+    #     )
+    #
+    #     send_slack_message(message)
+def pytest_sessionfinish(session, exitstatus):
+    terminalreporter = session.config.pluginmanager.get_plugin("terminalreporter")
+
+    if terminalreporter is None:
+        print("Slack summary skipped: terminal reporter not available.")
+        return
+
+    passed = 0
+    failed = 0
+    skipped = 0
+
+    for report in terminalreporter.stats.get("passed", []):
+        passed += 1
+
+    for report in terminalreporter.stats.get("failed", []):
+        failed += 1
+
+    for report in terminalreporter.stats.get("skipped", []):
+        skipped += 1
+
+    total = passed + failed + skipped
+
+    environment = session.config.getoption("--env") or "qa"
+    browser = session.config.getoption("--browser") or "chrome"
+
+    if exitstatus == 0:
+        overall = "PASSED"
+    else:
+        overall = "FAILED"
+
+    message = (
+        "Selenium Python Pytest — Local Test Summary\n\n"
+        f"Environment: {environment.upper()}\n"
+        f"Browser: {browser.capitalize()}\n"
+        "Execution: Local\n\n"
+        f"Total: {total}\n"
+        f"Passed: {passed}\n"
+        f"Failed: {failed}\n"
+        f"Skipped: {skipped}\n\n"
+        f"Overall: {overall}"
+    )
+
+    send_slack_message(message)
 
