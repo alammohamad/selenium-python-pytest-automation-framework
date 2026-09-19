@@ -173,11 +173,15 @@ def pytest_sessionfinish(session, exitstatus):
     else:
         overall = "FAILED"
 
+    date = datetime.now().strftime("%Y-%m-%d")
+    time = datetime.now().strftime("%I:%M:%S %p")
     message = (
         f"Selenium Python Pytest — {execution_type} Test Summary\n\n"
         f"Environment: {environment.upper()}\n"
         f"Browser: {browser.capitalize()}\n"
-        f"Execution: {execution_type}\n\n"
+        f"Execution: {execution_type}\n"
+        f"Date: {date}\n"
+        f"Time: {time}\n\n"
         f"Total: {total}\n"
         f"Passed: {passed}\n"
         f"Failed: {failed}\n"
