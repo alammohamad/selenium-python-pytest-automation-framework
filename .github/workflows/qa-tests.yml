@@ -1,4 +1,4 @@
-name: Pytest Selenium QA Tests
+name: Pytest Selenium QA Tests   # used in gitHubs workflows
 
 on:
   push:
@@ -54,3 +54,6 @@ jobs:
         with:
           name: pytest-report
           path: reports/
+
+# only use this file if need GitHub action CI/CD pipeline, github action is githubs built in command line
+# the above contents can be learned from https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax

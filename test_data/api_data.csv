@@ -1,0 +1,3 @@
+testcase_name,method,endpoint,expected_status
+TC_API_001_Get_Post,GET,/posts/1,200
+TC_API_002_Get_User,GET,/users/1,200
