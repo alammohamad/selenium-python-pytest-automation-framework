@@ -234,7 +234,12 @@ def pytest_sessionfinish(session, exitstatus):
         print(f"Unable to send email notification: {exc}")
 
     test_case_text = "\n".join(test_cases)
+    build_url = os.getenv("BUILD_URL")
 
+    if build_url:
+        manager_report_url = f"{build_url}Manager_Report/"
+    else:
+        manager_report_url = "http://localhost:8000/manager-summary.html"
     message = (
         f"Selenium Python Pytest — {execution_type} Test Summary\n\n"
         f"Environment: {environment.upper()}\n"
@@ -249,7 +254,7 @@ def pytest_sessionfinish(session, exitstatus):
         f"Failed: {failed}\n"
         f"Skipped: {skipped}\n\n"
         f"Overall: {overall}\n\n"
-        f"Manager Report: http://localhost:8000/manager-summary.html"
+        f"Manager Report: {manager_report_url}"
     )
 
     send_slack_message(message)
