@@ -88,11 +88,22 @@ def send_email():
     # Jenkins provides BUILD_URL automatically.
     # When running locally, BUILD_URL will not exist,
     # so we use the local report server URLs.
-    build_url = os.getenv("BUILD_URL")
+    #build_url = os.getenv("BUILD_URL")
 
-    if build_url:
-        manager_report_url = f"{build_url}Manager_Report/"
-        pytest_report_url = f"{build_url}Pytest_HTML_Report/"
+    # if build_url:
+    #     manager_report_url = f"{build_url}Manager_Report/"
+    #     pytest_report_url = f"{build_url}Pytest_HTML_Report/"
+    # else:
+    #     manager_report_url = "http://localhost:8000/manager-summary.html"
+    #     pytest_report_url = "http://localhost:8000/pytest-report.html"
+    #
+    # message = EmailMessage()
+
+    job_url = os.getenv("JOB_URL")
+
+    if job_url:
+        manager_report_url = f"{job_url}Manager_20Report/"
+        pytest_report_url = "http://localhost:8000/pytest-report.html"
     else:
         manager_report_url = "http://localhost:8000/manager-summary.html"
         pytest_report_url = "http://localhost:8000/pytest-report.html"

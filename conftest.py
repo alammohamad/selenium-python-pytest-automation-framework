@@ -236,10 +236,18 @@ def pytest_sessionfinish(session, exitstatus):
     test_case_text = "\n".join(test_cases)
     build_url = os.getenv("BUILD_URL")
 
-    if build_url:
-        manager_report_url = f"{build_url}Manager_Report/"
+    # if build_url:
+    #     manager_report_url = f"{build_url}Manager_Report/"
+    # else:
+    #     manager_report_url = "http://localhost:8000/manager-summary.html"
+
+    job_url = os.getenv("JOB_URL")
+
+    if job_url:
+        manager_report_url = f"{job_url}Manager_20Report/"
     else:
         manager_report_url = "http://localhost:8000/manager-summary.html"
+
     message = (
         f"Selenium Python Pytest — {execution_type} Test Summary\n\n"
         f"Environment: {environment.upper()}\n"
