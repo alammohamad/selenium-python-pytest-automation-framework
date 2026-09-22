@@ -103,7 +103,7 @@ def send_email():
 
     if job_url:
         manager_report_url = f"{job_url}Manager_20Report/"
-        pytest_report_url = "http://localhost:8000/pytest-report.html"
+        pytest_report_url = f"{job_url}Detailed_20Pytest_20Report/"
     else:
         manager_report_url = "http://localhost:8000/manager-summary.html"
         pytest_report_url = "http://localhost:8000/pytest-report.html"
